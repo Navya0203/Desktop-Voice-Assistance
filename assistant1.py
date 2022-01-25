@@ -5,7 +5,19 @@ import datetime
 import speech_recognition as sr #to give input as speech
 import os
 import random
-import smtplib   #for sending emails
+import smtplib #for emails
+import pyautogui
+
+
+class person:
+    name = ''
+    def setName(self, name):
+        self.name = name
+
+def there_exists(terms):
+    for term in terms:
+        if term in query:
+            return True
 
 
 
@@ -17,8 +29,8 @@ voices=engine.getProperty("voices")
 #print(voices[1].id)
 engine.setProperty("voice",voices[1].id)
 
-def wish():
-    '''When program starts assistant wishes the user'''
+def wish(name):
+    '''When programs starts it wishes the user'''
     Time=int(datetime.datetime.now().hour)
     if Time>=0 and Time<12:
         speak("Good Morning")
@@ -26,10 +38,10 @@ def wish():
         speak('Good Afternoon')
     else:
         speak('Good Evening')
-    speak('I am your Desktop Voice Assistant How may I help you')
+    speak(f"Hello {name}  I am your Desktop Voice Assistant How may I help you")
 
 def sendemail(to,content):
-    '''To send Emails'''
+    '''To send emails'''
     server=smtplib.SMTP("smtp.gmail.com",587)
     server.ehlo()
     server.starttls()
@@ -49,7 +61,6 @@ def command():
     with sr.Microphone() as source:
         print('Listening...')
         r.pause_threshold=2
-        r.energy_threshold=300
         audio=r.listen(source)
 
     try:
@@ -57,21 +68,26 @@ def command():
         query=r.recognize_google(audio,language="en-in")
         print(query)
     except:
-        print('Say that again please')
+        print('Sorry did not get that')
         return "None"
     return query
 
 if __name__== '__main__':
-    #directory with all the email IDs
+    #directory with all the email id
+    personobj=person()
     email={"Name1":"Name@gmail.com","Name2":"Name2@gmail.com"}
-    wish()
+    wish(personobj.name)
     while True:
         #taking speech input from the user
         query=command().lower()
-        #logic for executing tasks
+        #logic for executing task
+
+        if there_exists(['hey','hi','hello']):
+            speak('How may I help you')
+            continue
 
         #to access info on wikipedia
-        if "wikipedia" in query:
+        elif there_exists(["wikipedia"]):
             speak('Searching wikipedia..')
             query=query.replace("wikipedia","")
             try:
@@ -82,46 +98,73 @@ if __name__== '__main__':
             except:
                 print('Please say that again')
                 continue
+        elif there_exists(["capture","my screen","screenshot"]):
+            myScreenshot = pyautogui.screenshot()
+            myScreenshot.show()
 
+        #greetings
+        elif there_exists(["my name is"]):
+            name=query.split("is")[-1]
 
+            personobj.setName(name)
+            speak("I will remember that now")
+
+        elif there_exists(["what is your name","what's your name","tell me your name"]):
+            speak("My name is Fexa")
+
+        elif there_exists(["how are you","how are you doing"]):
+            speak("I'm very well, thanks for asking " + personobj.name)
 
         #to open youtube
-        elif "open youtube" in query:
+        elif there_exists(["youtube"]):
             webbrowser.open(f"youtube.com")
-        #to open google
-        elif "open google" in query:
-            webbrowser.open(f"google.com")
+
+
+        elif there_exists(["search"]) and 'youtube' not in query:
+            search_term = query.split()[-1]
+            url = f"https://google.com/search?q={search_term}"
+            webbrowser.get().open(url)
+            speak(f'Here is what I found for {search_term} on google')
 
         #to create a text file
-        elif "file" in query:
+        elif there_exists(["create file"]):
             speak('What will be the name of the file')
             name=command()
-          if name!="None":
+            if name!="None":
                 fhand=open(f"{name}.txt",'w')
                 speak('What do you want to write')
                 text=command()
                 fhand.write(text)
                 fhand.close()
                 speak('File created')
-          else:
-                speak('Could not create a file')
+            else:
+                speak('Sorry could not understand file name')
+                continue
 
 
 
         #to play music
-        elif "play music" in query:
+        elif there_exists(["play music"]):
             music_dir="Path of the file in which your songs are present on the computer can be provided here"
             songs=os.listdir(music_dir)
             print(songs)
             os.startfile(os.path.join(music_dir,random.choice(songs)))
         #to find out current time
-        elif " the time" in query:
+        elif there_exists(["what's the time","tell me the time","what time is it","what is the time"]):
             strtime=datetime.datetime.now().strftime("%H:%M:%S")
             speak(f"The time is {strtime}")
+        # current weather
+        elif there_exists(["weather"]):
+
+            #search_term = query.split("for")[-1]
+            url = "https://www.google.com/search?sxsrf=ACYBGNSQwMLDByBwdVFIUCbQqya-ET7AAA%3A1578847393212&ei=oUwbXtbXDN-C4-EP-5u82AE&q=weather&oq=weather&gs_l=psy-ab.3..35i39i285i70i256j0i67l4j0i131i67j0i131j0i67l2j0.1630.4591..5475...1.2..2.322.1659.9j5j0j1......0....1..gws-wiz.....10..0i71j35i39j35i362i39._5eSPD47bv8&ved=0ahUKEwiWrJvwwP7mAhVfwTgGHfsNDxsQ4dUDCAs&uact=5"
+            webbrowser.get().open(url)
+            speak("Here is what I found for on google")
+
 
         #to send an email
-        elif "send email" in query:
-           try:
+        elif there_exists(["send email"]):
+            try:
                 speak('What should I say')
                 content=command()
                 if content!="None":
@@ -132,12 +175,17 @@ if __name__== '__main__':
                         sendemail(to,content)
                     else:
                         print('No such name found')
-                    speak('Email has been sent')
                 else:
-                    speak('Sorry,was not able to send the email .Do not understand the content of the mail')
-                
+                    continue
+                speak('Email has been sent')
             except:
                 speak('Sorry ,was not able to send the email')
+
+        elif there_exists(["exit", "quit", "goodbye"]):
+            speak('Thank you')
+            break
+        else:
+            speak('Sorry I could not find anything on this')
         #to stop the assistant
         speak('Do you wish to continue please say Yes or No')
         ans=command()
