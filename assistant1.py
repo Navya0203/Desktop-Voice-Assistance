@@ -18,7 +18,7 @@ voices=engine.getProperty("voices")
 engine.setProperty("voice",voices[1].id)
 
 def wish():
-    '''When programs starts it wishes the user'''
+    '''When program starts assistant wishes the user'''
     Time=int(datetime.datetime.now().hour)
     if Time>=0 and Time<12:
         speak("Good Morning")
@@ -29,7 +29,7 @@ def wish():
     speak('I am your Desktop Voice Assistant How may I help you')
 
 def sendemail(to,content):
-    '''To send emails'''
+    '''To send Emails'''
     server=smtplib.SMTP("smtp.gmail.com",587)
     server.ehlo()
     server.starttls()
@@ -62,7 +62,7 @@ def command():
     return query
 
 if __name__== '__main__':
-    #directory with all the email id
+    #directory with all the email IDs
     email={"Name1":"Name@gmail.com","Name2":"Name2@gmail.com"}
     wish()
     while True:
