@@ -1,0 +1,8 @@
+webbrowser module
+pyttsx3  module
+wikipedia module
+datetime module
+speech_recognition module
+os module
+random module
+smtplib module
