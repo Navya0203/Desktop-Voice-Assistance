@@ -140,6 +140,22 @@ if __name__== '__main__':
             else:
                 speak('Sorry could not understand file name')
                 continue
+        #calculator
+        elif there_exists(["plus","minus","multiply","divide","power","+","-","*","/"]):
+            op = query.split()[1]
+
+            if op == '+':
+                speak(int(query.split()[0]) + int(query.split()[2]))
+            elif op == '-':
+                speak(int(query.split()[0]) - int(query.split()[2]))
+            elif op == 'multiply' or 'x':
+                speak(int(query.split()[0]) * int(query.split()[2]))
+            elif op == 'divide':
+                speak(int(query.split()[0]) / int(query.split()[2]))
+            elif op == 'power':
+                speak(int(query.split()[0]) ** int(query.split()[2]))
+            else:
+                speak("Wrong Operator")
 
 
 
@@ -186,9 +202,3 @@ if __name__== '__main__':
             break
         else:
             speak('Sorry I could not find anything on this')
-        #to stop the assistant
-        speak('Do you wish to continue please say Yes or No')
-        ans=command()
-        if "no" in ans.lower():
-          speak('Thank you')
-          break
