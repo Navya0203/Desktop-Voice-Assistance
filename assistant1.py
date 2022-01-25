@@ -96,12 +96,15 @@ if __name__== '__main__':
         elif "file" in query:
             speak('What will be the name of the file')
             name=command()
-            fhand=open(f"{name}.txt",'w')
-            speak('What do you want to write')
-            text=command()
-            fhand.write(text)
-            fhand.close()
-            speak('File created')
+          if name!="None":
+                fhand=open(f"{name}.txt",'w')
+                speak('What do you want to write')
+                text=command()
+                fhand.write(text)
+                fhand.close()
+                speak('File created')
+          else:
+                speak('Could not create a file')
 
 
 
@@ -118,17 +121,21 @@ if __name__== '__main__':
 
         #to send an email
         elif "send email" in query:
-            try:
+           try:
                 speak('What should I say')
                 content=command()
-                speak('Who should I send it to')
-                to_name=command()
-                if to_name in email:
-                    to=email[to_name]
-                    sendemail(to,content)
+                if content!="None":
+                    speak('Who should I send it to')
+                    to_name=command()
+                    if to_name in email:
+                        to=email[to_name]
+                        sendemail(to,content)
+                    else:
+                        print('No such name found')
+                    speak('Email has been sent')
                 else:
-                    print('No such name found')
-                speak('Email has been sent')
+                    speak('Sorry,was not able to send the email .Do not understand the content of the mail')
+                
             except:
                 speak('Sorry ,was not able to send the email')
         #to stop the assistant
