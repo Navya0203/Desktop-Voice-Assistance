@@ -60,7 +60,7 @@ def command():
     r=sr.Recognizer()
     with sr.Microphone() as source:
         print('Listening...')
-        r.pause_threshold=2
+        r.pause_threshold=1
         audio=r.listen(source)
 
     try:
@@ -102,6 +102,9 @@ if __name__== '__main__':
             myScreenshot = pyautogui.screenshot()
             myScreenshot.show()
 
+        elif there_exists(["what is my name"]):
+            speak(f"Your name is {personobj.name}")
+
         #greetings
         elif there_exists(["my name is"]):
             name=query.split("is")[-1]
@@ -142,20 +145,23 @@ if __name__== '__main__':
                 continue
         #calculator
         elif there_exists(["plus","minus","multiply","divide","power","+","-","*","/"]):
-            op = query.split()[1]
+            try:
+                op = query.split()[1]
 
-            if op == '+':
-                speak(int(query.split()[0]) + int(query.split()[2]))
-            elif op == '-':
-                speak(int(query.split()[0]) - int(query.split()[2]))
-            elif op == 'multiply' or 'x':
-                speak(int(query.split()[0]) * int(query.split()[2]))
-            elif op == 'divide':
-                speak(int(query.split()[0]) / int(query.split()[2]))
-            elif op == 'power':
-                speak(int(query.split()[0]) ** int(query.split()[2]))
-            else:
-                speak("Wrong Operator")
+                if op == '+':
+                    speak(int(query.split()[0]) + int(query.split()[2]))
+                elif op == '-':
+                    speak(int(query.split()[0]) - int(query.split()[2]))
+                elif op == 'multiply' or 'x':
+                    speak(int(query.split()[0]) * int(query.split()[2]))
+                elif op == 'divide':
+                    speak(int(query.split()[0]) / int(query.split()[2]))
+                elif op == 'power':
+                    speak(int(query.split()[0]) ** int(query.split()[2]))
+                else:
+                    speak("Wrong Operator")
+            except:
+                speak('Please repeat the operation again')
 
 
 
@@ -202,3 +208,8 @@ if __name__== '__main__':
             break
         else:
             speak('Sorry I could not find anything on this')
+        speak('Do you wish to continue.Say yes or no')
+        ans=command()
+        if ans.lower()=='no':
+            speak('Thank you')
+            break
