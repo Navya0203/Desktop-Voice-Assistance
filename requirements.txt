@@ -6,3 +6,4 @@ speech_recognition module
 os module
 random module
 smtplib module
+pyautogui module
