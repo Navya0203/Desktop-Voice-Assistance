@@ -1,2 +1,2 @@
 # Desktop Voice Assistant
- A small desktop voice assistant that has automated a handful of our daily duties. It accepts speech as input and does the task.
+A desktop voice assistant that has automated a handful of your daily duties.The basic purpose of this is to make work easier as it re-directs you to various main sites and performs various important functions for your PC. 
